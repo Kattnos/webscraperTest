@@ -5,32 +5,59 @@ import time
 import webbrowser
 
 def clicking_article(selectedArticle):
-    if 1 <= int(selectedArticle) <= 30:
-        article = int(selectedArticle) + 1
-        driver.find_element(by=By.XPATH,
-                            value=f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{article}]/c-wiz/div/article').click()
-        driver.switch_to.window(driver.window_handles[1])
-        url = driver.current_url
-        webbrowser.open_new(url)
+        article = int(selectedArticle) - 1
+        webbrowser.open_new(articles[article].url)
         ask_for_input()
-    else:
-        print('Input does not correspond to an article')
+def print_url(selectedArticle):
+    article = int(selectedArticle) - 1
+    print(articles[article].url)
+    ask_for_input()
 
 
 def ask_for_input():
-    selectedArticle = input("Select article to open or type 'exit' to exit")
-    if selectedArticle != 'exit':
-        clicking_article(selectedArticle)
+    selectedInput = input("Enter a command or type 'help'")
+
+    if selectedInput == 'help':
+        print('Available commands: \n articleNumber.open \n articleNumber.company \n articleNumber.url \n exit')
+        ask_for_input()
+    if selectedInput == 'exit':
+        return
+
+    subCommand = selectedInput.rpartition('.')[2]
+    selectedArticle = selectedInput.rpartition('.')[0]
+
+    try:
+        selectedInt = int(selectedArticle)
+    except:
+        print('Unknown command')
+        ask_for_input()
+
+
+    if 5 >= selectedInt >= 1:
+        match subCommand:
+            case 'open':
+                clicking_article(selectedInt)
+            case 'url':
+                print_url(selectedInt)
+            case 'company':
+                print('Returning company name')
+            case _:
+                print('Unknown command')
+                ask_for_input()
+
 
 class article:
-    def __init__(self, title, company , content, button):
+    def __init__(self, title, company , content, button, url):
         self.title = title
         self.company = company
         self.content = content
         self.button = button
+        self.url = url
 
 #ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
-ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
+#ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
+ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
+
 op = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=ser, options=op)
 url = 'https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US%3Aen'
@@ -40,7 +67,7 @@ driver.find_element(by=By.XPATH, value=refuseCookiesButton).click()
 
 articles = []
 
-for x in range(2, 22):
+for x in range(2, 7):
      news_path = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article/h4'
      buttonPath = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article'
      try:
@@ -58,7 +85,7 @@ for x in range(2, 22):
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
 
-        articles.append(article(title.text,'dsfs','fsdfs' , button))
+        articles.append(article(title.text,'dsfs','fsdfs' , button, url))
 
         visibleInt = x-1
         listInt = x-2
