@@ -1,0 +1,4 @@
+bbc-BBC
+thetimesofisrael-The Times of Israel
+cnn-CNN
+washingtonpost-The Washington Post

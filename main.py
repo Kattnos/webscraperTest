@@ -4,10 +4,22 @@ from selenium.webdriver.common.by import By
 import time
 import webbrowser
 
+file = open('companyNames.txt')
+companyFile = file.readlines()
+
+companyURL = []
+companyFormatted = []
+for line in companyFile:
+    companyURL.append(line.partition('-')[0])
+    string = line.partition('-')[2]
+    companyFormatted.append(string)
+
 def clicking_article(selectedArticle):
-        article = int(selectedArticle) - 1
-        webbrowser.open_new(articles[article].url)
-        ask_for_input()
+    article = int(selectedArticle) - 1
+    webbrowser.open_new(articles[article].url)
+    ask_for_input()
+
+
 def print_url(selectedArticle):
     article = int(selectedArticle) - 1
     print(articles[article].url)
@@ -54,9 +66,9 @@ class article:
         self.button = button
         self.url = url
 
-#ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
+ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
 #ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
-ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
+#ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
 
 op = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=ser, options=op)
@@ -84,6 +96,11 @@ for x in range(2, 7):
         url = driver.current_url
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
+
+        for string in companyURL:
+            if url.find(string) != -1:
+                int = companyURL.index(string)
+                print(companyFormatted[int])
 
         articles.append(article(title.text,'dsfs','fsdfs' , button, url))
 
