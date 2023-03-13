@@ -2,3 +2,7 @@ bbc-BBC
 thetimesofisrael-The Times of Israel
 cnn-CNN
 washingtonpost-The Washington Post
+cnbc-CNBC
+youtube-Youtube
+aljazeera-Al Jazeera
+apnews-Associated Press

@@ -25,6 +25,11 @@ def print_url(selectedArticle):
     print(articles[article].url)
     ask_for_input()
 
+def print_company(selectedArticle):
+    article = int(selectedArticle) - 1
+    print(articles[article].company)
+    ask_for_input()
+
 
 def ask_for_input():
     selectedInput = input("Enter a command or type 'help'")
@@ -52,11 +57,10 @@ def ask_for_input():
             case 'url':
                 print_url(selectedInt)
             case 'company':
-                print('Returning company name')
+                print_company(selectedInt)
             case _:
                 print('Unknown command')
-                ask_for_input()
-
+        ask_for_input()
 
 class article:
     def __init__(self, title, company , content, button, url):
@@ -98,11 +102,14 @@ for x in range(2, 7):
         driver.switch_to.window(driver.window_handles[0])
 
         for string in companyURL:
-            if url.find(string) != -1:
+            searchableURL = url.rpartition('1')[0]
+            if searchableURL.find(string) != -1:
                 int = companyURL.index(string)
-                print(companyFormatted[int])
+                company = companyFormatted[int]
+            else:
+                company = 'Unknown'
 
-        articles.append(article(title.text,'dsfs','fsdfs' , button, url))
+        articles.append(article(title.text, company, 'fsdfs', button, url))
 
         visibleInt = x-1
         listInt = x-2
