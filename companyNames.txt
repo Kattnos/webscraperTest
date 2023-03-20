@@ -6,3 +6,11 @@ cnbc-CNBC
 youtube-Youtube
 aljazeera-Al Jazeera
 apnews-Associated Press
+politico-Politico
+cbsnews-CBS News
+theguardian-The Guardian
+nytimes-The New York Times
+reuters-Reuters
+nebraska-KHGI Nebraska
+dw-Deutsche Welle
+tribuneindia-The Tribune

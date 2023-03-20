@@ -13,6 +13,7 @@ for line in companyFile:
     companyURL.append(line.partition('-')[0])
     string = line.partition('-')[2]
     companyFormatted.append(string)
+print(companyURL)
 
 def clicking_article(selectedArticle):
     article = int(selectedArticle) - 1
@@ -48,8 +49,6 @@ def ask_for_input():
     except:
         print('Unknown command')
         ask_for_input()
-
-
     if 5 >= selectedInt >= 1:
         match subCommand:
             case 'open':
@@ -60,6 +59,9 @@ def ask_for_input():
                 print_company(selectedInt)
             case _:
                 print('Unknown command')
+        ask_for_input()
+    else:
+        print('Article not found')
         ask_for_input()
 
 class article:
@@ -104,8 +106,10 @@ for x in range(2, 7):
         for string in companyURL:
             searchableURL = url.rpartition('1')[0]
             if searchableURL.find(string) != -1:
-                int = companyURL.index(string)
-                company = companyFormatted[int]
+                searchInt = companyURL.index(string)
+                company = companyFormatted[searchInt].rstrip()
+                print(company)
+                break
             else:
                 company = 'Unknown'
 
