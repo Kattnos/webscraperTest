@@ -13,7 +13,46 @@ for line in companyFile:
     companyURL.append(line.partition('-')[0])
     string = line.partition('-')[2]
     companyFormatted.append(string)
-print(companyURL)
+
+def load_articles():
+    for x in range(2, 7):
+        news_path = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article/h4'
+        buttonPath = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article'
+        try:
+            title = driver.find_element(by=By.XPATH, value=news_path)
+        except:
+            news_path = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/article/div[1]/div[2]/div/h4'
+            buttonPath = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/article/div[1]/div[1]/a'
+        finally:
+            title = driver.find_element(by=By.XPATH, value=news_path)
+            button = driver.find_element(by=By.XPATH, value=buttonPath)
+
+            button.click()
+            driver.switch_to.window(driver.window_handles[1])
+            url = driver.current_url
+            driver.close()
+            driver.switch_to.window(driver.window_handles[0])
+
+            companyFound = False
+            for string in companyURL:
+                if url.find(string) != -1:
+                    searchInt = companyURL.index(string)
+                    company = companyFormatted[searchInt].rstrip()
+                    companyFound = True
+
+                if companyFound is True:
+                    searchInt2 = companyURL.index(string)
+                    company2 = companyFormatted[searchInt].rstrip()
+                    if searchInt2 > searchInt:
+                        company = company2
+
+            articles.append(article(title.text, company, 'fsdfs', button, url))
+
+            visibleInt = x - 1
+            listInt = x - 2
+
+            print(f'{visibleInt}: {articles[listInt].title}')
+    load_articles()
 
 def clicking_article(selectedArticle):
     article = int(selectedArticle) - 1
@@ -72,8 +111,8 @@ class article:
         self.button = button
         self.url = url
 
-ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
-#ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
+#ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
+ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
 #ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
 
 op = webdriver.ChromeOptions()
@@ -85,39 +124,4 @@ driver.find_element(by=By.XPATH, value=refuseCookiesButton).click()
 
 articles = []
 
-for x in range(2, 7):
-     news_path = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article/h4'
-     buttonPath = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article'
-     try:
-         title = driver.find_element(by=By.XPATH, value=news_path)
-     except:
-         news_path = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/article/div[1]/div[2]/div/h4'
-         buttonPath = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/article/div[1]/div[1]/a'
-     finally:
-        title = driver.find_element(by=By.XPATH, value=news_path)
-        button = driver.find_element(by=By.XPATH, value=buttonPath)
-
-        button.click()
-        driver.switch_to.window(driver.window_handles[1])
-        url = driver.current_url
-        driver.close()
-        driver.switch_to.window(driver.window_handles[0])
-
-        for string in companyURL:
-            searchableURL = url.rpartition('1')[0]
-            if searchableURL.find(string) != -1:
-                searchInt = companyURL.index(string)
-                company = companyFormatted[searchInt].rstrip()
-                print(company)
-                break
-            else:
-                company = 'Unknown'
-
-        articles.append(article(title.text, company, 'fsdfs', button, url))
-
-        visibleInt = x-1
-        listInt = x-2
-
-        print(f'{visibleInt}: {articles[listInt].title}')
-
-ask_for_input()
+load_articles()
