@@ -29,13 +29,17 @@ def load_articles():
 
             button.click()
             driver.switch_to.window(driver.window_handles[1])
+            time.sleep(1)
+            print(driver.current_url)
             url = driver.current_url
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
 
             companyFound = False
+            company = 'Unknown company'
+
             for string in companyURL:
-                if url.find(string) != -1:
+                if url.find(string) != -1 and companyFound is False:
                     searchInt = companyURL.index(string)
                     company = companyFormatted[searchInt].rstrip()
                     companyFound = True
@@ -43,7 +47,7 @@ def load_articles():
                 if companyFound is True:
                     searchInt2 = companyURL.index(string)
                     company2 = companyFormatted[searchInt].rstrip()
-                    if searchInt2 > searchInt:
+                    if searchInt2 < searchInt:
                         company = company2
 
             articles.append(article(title.text, company, 'fsdfs', button, url))
@@ -52,7 +56,7 @@ def load_articles():
             listInt = x - 2
 
             print(f'{visibleInt}: {articles[listInt].title}')
-    load_articles()
+    ask_for_input()
 
 def clicking_article(selectedArticle):
     article = int(selectedArticle) - 1
