@@ -1,15 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-import time
 import webbrowser
 import tkinter as tk
+from newspaper import Article
 
 file = open('companyNames.txt')
 companyFile = file.readlines()
 
 root=tk.Tk()
-root.geometry('900x700')
+root.geometry('1000x900')
 
 companyURL = []
 companyFormatted = []
@@ -55,12 +55,6 @@ def refresh_articles():
             title = driver.find_element(by=By.XPATH, value=news_path)
             button = driver.find_element(by=By.XPATH, value=buttonPath)
 
-            # button.click()
-            # driver.switch_to.window(driver.window_handles[1])
-            # url = driver.current_url
-            # driver.close()
-            # driver.switch_to.window(driver.window_handles[0])
-
             for string in companyURL:
                 searchableURL = url.rpartition('1')[0]
                 if searchableURL.find(string) != -1:
@@ -77,6 +71,20 @@ def refresh_articles():
 def open_article(articleInt):
     print('Opening article ' + str(articleInt))
 
+    articles[articleInt].button.click()
+    driver.switch_to.window(driver.window_handles[1])
+    url = driver.current_url
+    driver.close()
+    driver.switch_to.window(driver.window_handles[0])
+
+    accessedArticle=Article(url)
+    accessedArticle.download()
+    accessedArticle.parse()
+
+    print(accessedArticle.title)
+
+    outputField.delete('1.0', tk.END)
+    outputField.insert(tk.END, accessedArticle.text)
 
 ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
 #ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
