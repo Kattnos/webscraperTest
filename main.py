@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 import webbrowser
 import tkinter as tk
 from newspaper import Article
+import time, os, sys
 
 file = open('companyNames.txt')
 companyFile = file.readlines()
@@ -73,6 +74,7 @@ def open_article(articleInt):
 
     articles[articleInt].button.click()
     driver.switch_to.window(driver.window_handles[1])
+    time.sleep(0.5)
     url = driver.current_url
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
@@ -86,16 +88,16 @@ def open_article(articleInt):
     outputField.delete('1.0', tk.END)
     outputField.insert(tk.END, accessedArticle.text)
 
-ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
-#ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
-#ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
-
 articleSelectField = tk.Frame(root)
 titleText = []
 titleButton = []
 
+ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
+#ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
+#ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
 op = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=ser, options=op)
+
 url = 'https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US%3Aen'
 driver.get(url)
 refuseCookiesButton = '//*[@id="yDmH0d"]/c-wiz/div/div/div/div[2]/div[1]/div[3]/div[1]/div[1]/form[1]/div/div/button'
