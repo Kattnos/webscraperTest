@@ -40,8 +40,10 @@ class article:
         self.url = url
 
 articles = []
+articleLength = 5
+
 def refresh_articles():
-    for x in range(2, 7):
+    for x in range(2, (articleLength + 2)):
         news_path = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article/h4'
         buttonPath = f'//*[@id="yDmH0d"]/c-wiz/div/main/c-wiz/div[2]/c-wiz/c-wiz[{x}]/c-wiz/div/article'
         try:
@@ -70,19 +72,18 @@ def refresh_articles():
                     company = 'Unknown'
 
             articles.append(article(title.text, company, 'fsdfs', button, url))
+            titleText[x-2].config(text=articles[x-2].title)
 
-            visibleInt = x - 1
-            listInt = x - 2
-
-            print(f'{visibleInt}: {articles[listInt].title}')
-            print(len(articles))
-            print(len(titleText))
-            titleText[listInt].config(text=articles[listInt].title)
-
+def open_article(articleInt):
+    print('Opening article ' + str(articleInt))
 
 ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
 #ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
 #ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
+
+articleSelectField = tk.Frame(root)
+titleText = []
+titleButton = []
 
 op = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=ser, options=op)
@@ -95,9 +96,12 @@ articleSelectField = tk.Frame(root)
 titleText = []
 titleButton = []
 
-for article in articles:
-   titleText.append(tk.Label(articleSelectField))
-   titleButton.append(tk.Button(articleSelectField, text='Read Article'))
+for int in range(0, articleLength):
+    titleText.append(tk.Label(articleSelectField))
+    print(int)
+    titleButton.append(tk.Button(articleSelectField, text='Read Article', command=lambda: open_article(int)))
+
+refresh_articles()
 
 inputField = tk.Frame(root)
 programTitle = tk.Label(inputField, text='Retrieve and read articles from Google News', font=('Arial', 16))
