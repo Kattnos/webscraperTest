@@ -77,6 +77,7 @@ def refresh_articles():
 def open_article(articleInt):
     print('Opening article ' + str(articleInt))
 
+
 ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
 #ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
 #ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
@@ -99,7 +100,10 @@ titleButton = []
 for int in range(0, articleLength):
     titleText.append(tk.Label(articleSelectField))
     print(int)
-    titleButton.append(tk.Button(articleSelectField, text='Read Article', command=lambda: open_article(int)))
+    titleButton.append(tk.Button(articleSelectField, text='Read Article'))
+
+for int, button in enumerate(titleButton):
+    titleButton[int].config(command=lambda int=int: open_article(int))
 
 refresh_articles()
 
