@@ -4,21 +4,13 @@ from selenium.webdriver.common.by import By
 import webbrowser
 import tkinter as tk
 from newspaper import Article
-import time, os, sys
-
-file = open('companyNames.txt')
-companyFile = file.readlines()
+import time
 
 root=tk.Tk()
 root.geometry('1000x900')
 
 companyURL = []
 companyFormatted = []
-for line in companyFile:
-    companyURL.append(line.partition('-')[0])
-    string = line.partition('-')[2]
-    companyFormatted.append(string)
-print(companyURL)
 
 def clicking_article(selectedArticle):
     article = int(selectedArticle) - 1
@@ -33,9 +25,8 @@ def print_company(selectedArticle):
     print(articles[article].company)
 
 class article:
-    def __init__(self, title, company , content, button, url):
+    def __init__(self, title , content, button, url):
         self.title = title
-        self.company = company
         self.content = content
         self.button = button
         self.url = url
@@ -56,17 +47,17 @@ def refresh_articles():
             title = driver.find_element(by=By.XPATH, value=news_path)
             button = driver.find_element(by=By.XPATH, value=buttonPath)
 
-            for string in companyURL:
-                searchableURL = url.rpartition('1')[0]
-                if searchableURL.find(string) != -1:
-                    searchInt = companyURL.index(string)
-                    company = companyFormatted[searchInt].rstrip()
-                    print(company)
-                    break
-                else:
-                    company = 'Unknown'
+            #for string in companyURL:
+            #    searchableURL = url.rpartition('1')[0]
+            #    if searchableURL.find(string) != -1:
+            #        searchInt = companyURL.index(string)
+            #        company = companyFormatted[searchInt].rstrip()
+            #        print(company)
+            #        break
+            #    else:
+            #        company = 'Unknown's
 
-            articles.append(article(title.text, company, 'fsdfs', button, url))
+            articles.append(article(title.text, 'fsdfs', button, url))
             titleText[x-2].config(text=articles[x-2].title)
 
 def open_article(articleInt):
@@ -83,8 +74,6 @@ def open_article(articleInt):
     accessedArticle.download()
     accessedArticle.parse()
 
-    print(accessedArticle.title)
-
     outputField.delete('1.0', tk.END)
     outputField.insert(tk.END, accessedArticle.text)
 
@@ -92,9 +81,8 @@ articleSelectField = tk.Frame(root)
 titleText = []
 titleButton = []
 
-ser = Service(r"C:\Users\05SIHAB\Documents\chromedriver")
-#ser = Service(r"C:\Dev\Python\webscraperTest\chromedriver")
-#ser = Service(r'C:\Users\Simon Hagelin\PycharmProjects\webscraperTest\chromedriver')
+ser = Service(r"./driver/chromedriver.exe")
+
 op = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=ser, options=op)
 
