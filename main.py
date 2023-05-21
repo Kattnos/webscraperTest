@@ -7,7 +7,8 @@ from newspaper import Article
 import time
 
 root=tk.Tk()
-root.geometry('1000x900')
+root.geometry('1100x720')
+root.title('Article Reader')
 
 companyURL = []
 companyFormatted = []
@@ -122,8 +123,8 @@ refreshButton.pack(pady=5)
 
 inputField.pack(pady=10,padx=2)
 articleSelectField.pack(pady=5,padx=5)
-outputFieldFrame.pack(pady=20,padx=10)
-outputField.pack(side =tk.LEFT, fill = tk.BOTH)
+outputFieldFrame.pack(pady=20,ipadx=50, expand='true', fill='both')
+outputField.pack(side=tk.LEFT, expand='true', fill='both')
 
 scroll = tk.Scrollbar(outputFieldFrame, orient='vertical', command=outputField.yview)
 outputField.config(yscrollcommand=scroll.set)
